@@ -44,13 +44,19 @@
 			height: 50px;
 			width: 50px;
 		}
-		.form{
+		.inserir{
 			position: absolute;
 			top: 10%;
 			right: 40%;
 			padding-bottom: 5px;
 			left: 5px;
 		}
+		.imagens{
+			width: 300px;
+			height: 200px;
+		}
+
+
 	</style>
 </head>
 
@@ -77,24 +83,31 @@
 	</div>
 
 	<div>
-		<form class = "form" action="create" method="POST">
-			<input type="text" placeholder="Nome" name="nome">
-			<input type="text" placeholder="preco" name="preco">
-			<input type="text" placeholder="ID" name="ID">
+		<form class = "inserir" action="create" method="POST" enctype="multipart/form-data">
+			<input type="text" placeholder="Modelo" name="modelo" />
+			<input type="text" placeholder="preco" name="preco" />
+			<input type="text" placeholder="ID" name="ID" />
+			<input type='file' name="imagem" />
 			<button type="submit">Submit</button>
 		</form>
-	</div>
 
-	<div>
+
 		{{#users}}
 		<ul>
-
-			{{_id}} {{nome}} {{preco}} {{ID}}
-			<form>
+			<form method="post" action="/delete/{{_id}}">
+				<img class="imagens" src="{{imagem}}">
 				<button type="submit">Delete</button>
+				<p>
+					Modelo:{{modelo}}<br>
+					Preco:{{preco}}<br>
+				 	ID:{{ID}}
+				 </p>
+				
 			</form>
 		</ul>
 		{{/users}}
+
 	</div>
+
 </body>
 </html>
