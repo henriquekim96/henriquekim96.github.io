@@ -1,45 +1,42 @@
 let Product = require('../models/product.model');
-exports.test = (req, res) =>{
-	res.send('Greetings from the Test controller');
-};
-//CREATE
+
+
+//criar
 exports.create = (req, res) => {
+
     let product = new Product(
         {
-            nome: req.body.nome,
+            modelo: req.body.modelo,
             preco: req.body.preco,
             ID: req.body.ID
         }
     );
-
+    console.log('Sucesso', product);
     product.save((err) => {
         if (err) {
-            return next(err);
+            next(err);
+
+            
         }
-       res.redirect('/');
+        else{
+            res.send(product);
+        }
     })
 };
 
-//READ
+//ler
 exports.product_details = (req, res) => {
-    Product.findById(req.params.id, (err, product) => {
+    Product.find((err, product) => {
         if (err) return next(err);
         res.send(product);
     })
 };
-//UPDATE
-exports.update = (req, res) => {
-	Product.findByIdAndUpdate(req.params.id, {$set: req.body},
-	(err, product) =>{
-		if(err) return next(err);
-		res.redirect('/');
-	});
-};
-
-//DELETE
+//deletar
 exports.delete = (req, res) => {
-	Product.findByIdAndRemove(req.params.id, (err) => {
-		if(err) return next(err);
-		res.redirect('/');
-	})
+    Product.findByIdAndRemove(req.params.id, (err) => {
+        if(err) return next(err);
+        res.redirect('/');
+    })
 }
+
+

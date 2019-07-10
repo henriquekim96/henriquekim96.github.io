@@ -2,69 +2,46 @@
 <html>
 <head>
 	<title>Brasil | Volvo Cars</title>
-	<style type="text/css">
-		body{
-			margin: 0;
-			font-family: Arial, Helvetica, sans-serif;
-		}
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-		.barratop{
-			position: relative;
-			overflow: hidden;
-			background-color: white;
-			width: 100%;
-		}
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="script.js"></script>
 
-		.barratop a {
-			float: left;
-			color: black;
-			text-align: center;
-			padding: 20px 20px;
-			text-decoration: none;
-			font-size: 15px;
-		}
-		.barratop-centro a{
-			float: none;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-		}
+	<script>
+	$(document).ready(function(){
+	$.ajaxSetup({ cache: true });
+	 $('#search').keyup(function(){
+	  $('#result').html('');
+	  $('#state').val('');
+	  var searchField = $('#search').val();
+	  var expression = new RegExp(searchField, "i");
+	  $.getJSON('http://localhost:1234/read', function(data) {
+	   $.each(data, function(key, value){
+	    if (value.modelo.search(expression) != -1 || value.ID.search(expression) != -1)
+	    {
+	     $('#result').append('<li class="list-group-item link-class" style="color: white">'+value.modelo+' | <span class="text-muted">'+value.ID+'</span></li>');
+	    }
+	   });   
+	  });
+	 });
+	 
+	 $('#result').on('click', 'li', function() {
+	  var click_text = $(this).text().split('|');
+	  $('#search').val($.trim(click_text[0]));
+	  $("#result").html('');
+	 });
+	});
+	</script>
 
-		.barratop-right{
-			float: right;
-		}
-		.img{
-			position: relative;
-			text-align: center;
-			width: 100%;
-			
-		}
-		.logo{
-			height: 50px;
-			width: 50px;
-		}
-		.inserir{
-			position: absolute;
-			top: 10%;
-			right: 40%;
-			padding-bottom: 5px;
-			left: 5px;
-		}
-		.imagens{
-			width: 300px;
-			height: 200px;
-		}
-
-
-	</style>
 </head>
 
 <body>
 	<div class="barratop">
 		
 		<div class="barratop-centro">
-			<a href="#home"><img class="logo" src="/logoVolvo.png"></a>
+			<a href=""><img class="logo" src="/logoVolvo.png"></a>
 		</div>
 
 		<a href="">Carros</a>
@@ -82,32 +59,41 @@
 		<img class="img" src="/imgVolvo.png">
 	</div>
 
+	<div class="inserir">
+
+		<input type="text" placeholder="Modelo" name="modelo" id="modelo"/>
+		<input type="number" placeholder="preco" name="preco" id="preco" />
+		<input type="number" placeholder="ID" name="ID" id="ID" />
+		<button type="submit" name="enviar" id ="enviar">Enviar</button>
+		<br>
+		<br>
+		<input type="text" size="40" name="search" id="search" placeholder="Search Employee Details" class="form-control" />
+    	<ul class="list-group" id="result"></ul>
+   </div>
+  
+
+	</div>
+
 	<div>
-		<form class = "inserir" action="create" method="POST" enctype="multipart/form-data">
-			<input type="text" placeholder="Modelo" name="modelo" />
-			<input type="text" placeholder="preco" name="preco" />
-			<input type="text" placeholder="ID" name="ID" />
-			<input type='file' name="imagem" />
-			<button type="submit">Submit</button>
-		</form>
-
-
 		{{#users}}
 		<ul>
 			<form method="post" action="/delete/{{_id}}">
-				<img class="imagens" src="{{imagem}}">
-				<button type="submit">Delete</button>
+				<button type="submit">Deletar</button>
 				<p>
 					Modelo:{{modelo}}<br>
 					Preco:{{preco}}<br>
-				 	ID:{{ID}}
+				 	ID:{{ID}}<br>
+				 	_id:{{_id}}
 				 </p>
-				
 			</form>
 		</ul>
 		{{/users}}
 
 	</div>
+
+	<dir id ="dados">
+		<img src="/giphy.gif" id="img" style="display:none"/ >
+	</dir>
 
 </body>
 </html>
